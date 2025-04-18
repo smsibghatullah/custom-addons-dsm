@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wiz_account_sales_report_view" model="ir.ui.view">
+        <field name="name">account.sales.report.view</field>
+        <field name="model">account.sales.report</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="check_report" string="PDF Report" type="object" default_focus="1" class="oe_highlight"/>
+                    <button name="action_print_excel" string="XLSX Report" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_sales_report_wizard" model="ir.actions.act_window">
+        <field name="name">Account Sales Report</field>
+        <field name="res_model">account.sales.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wiz_account_sales_report_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="wiz_account_invoices_report_view" model="ir.ui.view">
+        <field name="name">account.invoices.report.view</field>
+        <field name="model">account.invoices.report</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_invoices_report_wizard" model="ir.actions.act_window">
+        <field name="name">Account Invoice Report</field>
+        <field name="res_model">account.invoices.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wiz_account_invoices_report_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="dynamic_account_sales_report_root"
+              name="Account Sales Report"
+              action="action_account_sales_report_wizard"
+              parent="account.menu_finance_reports"
+              sequence="20"/>
+
+    <menuitem id="dynamic_account_invoices_report_root"
+              name="Account Invoices Report"
+              action="action_account_invoices_report_wizard"
+              parent="account.menu_finance_reports"
+              sequence="20"/>
+
+
+</odoo>

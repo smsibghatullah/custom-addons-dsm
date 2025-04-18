@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="account_sales_data_view">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <h3 class="text-center">
+                    Account Sales Report
+                </h3>
+                <tr t-foreach="res_all" t-as="res_1">
+                    <t t-if="date_from and date_to">
+                        <p class="text-center">Account Sales Report From Date (
+                            <span t-esc="date_from"/>
+                            <span>to Date</span>
+                            <span t-esc="date_to"/>
+                            )
+                        </p>
+                    </t>
+
+                    <br/>
+                    <div class="page">
+                        <table class="table table-condensed">
+
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Sr.No</th>
+                                    <th class="text-center">User</th>
+                                    <th class="text-center">Order No.</th>
+                                    <th class="text-center">Cash</th>
+                                    <th class="text-center">Back</th>
+                                    <th class="text-center">Card</th>
+                                    <th class="text-center">Total Amount</th>
+                                    <th class="text-center">Paid Amount</th>
+                                    <th class="text-center">Due Amount</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <t t-set="item_count" t-value="1"/>
+
+                                <tr t-foreach="res_1['all_data']" t-as="line_1">
+
+                                    <td class="text-center">
+                                        <span t-esc="item_count"/>
+                                        <t t-set="item_count" t-value="item_count + 1"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line_1['user_id']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line_1['name']"/>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span t-esc="line_1['cash_payment']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line_1['bank_payment']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line_1['card_payment']"/>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span t-esc="line_1['amount_total']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line_1['amount_residual']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="line_1['amount_paid']"/>
+                                    </td>
+                                </tr>
+
+                                <tr style="font-weight:bold">
+
+                                    <td class="text-center" t-att-colspan="3">
+                                        Total
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span t-esc="res_1['cash_total']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="res_1['bank_total']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="res_1['card_total']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="res_1['grand_total']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="res_1['paid_total']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="res_1['rem_total']"/>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </tr>
+
+
+            </t>
+        </t>
+    </template>
+
+</odoo>

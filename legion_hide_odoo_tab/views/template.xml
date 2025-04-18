@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+
+
+        <template id="change_title_web_layout" inherit_id="web.layout">
+            <xpath expr="//title" position="replace">
+                <title>
+                    &#160;
+                </title>
+            </xpath>
+        </template>
+
+
+    </data>
+</odoo>

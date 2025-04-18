@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_account_sales_report" model="ir.actions.report">
+            <field name="name">Account Sales Report</field>
+            <field name="model">account.sales.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">dynamic_invoice_sale_report.account_sales_data_view</field>
+            <field name="report_file">dynamic_invoice_sale_report.account_sales_data_view</field>
+            <!--                        <field name="binding_model_id" ref="sale.model_sale_order"/>-->
+            <field name="binding_view_types">form</field>
+            <field name="print_report_name">'Account Sales Report'</field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="paperformat_invoice_report" model="report.paperformat">
+            <field name="name">Invoice Report Paper Format</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">40</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+        <record id="action_account_invoice_report" model="ir.actions.report">
+            <field name="name">Account Invoice Report</field>
+            <field name="model">account.sales.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">dynamic_invoice_sale_report.account_sales_data_view_03</field>
+            <field name="report_file">dynamic_invoice_sale_report.account_sales_data_view_03</field>
+            <field name="paperformat_id" ref="paperformat_invoice_report"/>
+            <!--                        <field name="binding_model_id" ref="sale.model_sale_order"/>-->
+            <field name="binding_view_types">form</field>
+            <field name="print_report_name">'Account Invoice Report'</field>
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>

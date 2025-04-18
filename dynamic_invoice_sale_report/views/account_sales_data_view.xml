@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="account_sales_data_view">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <h3 class="text-center">Account Sales Report</h3>
+
+                <t t-if="date_from and date_to">
+                    <p class="text-center">
+                        Account Sales Report From Date (
+                        <span t-esc="date_from"/>
+                        to <span t-esc="date_to"/>)
+                    </p>
+                </t>
+
+                <div class="page">
+                    <t t-foreach="user_data.items()" t-as="user">
+                        <h4 class="text-center"><b><span t-esc="user[0]"/></b></h4>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Date &amp; Time</th>
+                                    <th class="text-center">Order No.</th>
+                                    <th class="text-center">Type</th>
+                                    <th class="text-center">Cash</th>
+                                    <th class="text-center">Credit Card</th>
+                                    <th class="text-center">Cheque</th>
+                                    <th class="text-center">Bank</th>
+                                    <th class="text-center">Total With VAT</th>
+                                    <th class="text-center">Paid Amount</th>
+                                    <th class="text-center">Due Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="user[1]['invoices']" t-as="invoice">
+                                    <td class="text-center"><span t-esc="invoice['create_date']"/></td>
+                                    <td class="text-center"><span t-esc="invoice['order']"/></td>
+                                    <td class="text-center">
+                                        <span t-esc="invoice['move_type']" t-att-style="'color:red;'" t-if="invoice['move_type'] == 'Credit Note'"/>
+                                    </td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['cash_payment']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['card_payment']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['cheque_payment']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['bank_payment']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['grand_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['paid_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % invoice['due_total']"/></td>
+                                </tr>
+
+                                <tr style="font-weight: bold;">
+                                    <td t-att-colspan="3" class="text-center">
+                                        <b>Total for <span t-esc="user[0]"/></b>
+                                    </td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['cash_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['card_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['cheque_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['bank_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['grand_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['paid_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['due_total']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/><br/>
+                    </t>
+
+                    <h3 class="text-center">Salesman Summary Report</h3>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Sales Person Name</th>
+                                <th class="text-center">Credit Card</th>
+                                <th class="text-center">Cash</th>
+                                <th class="text-center">Cheque</th>
+                                <th class="text-center">Bank</th>
+                                <th class="text-center">Due Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="user_data.items()" t-as="user">
+                                <tr>
+                                    <td class="text-center"><span t-esc="user[0]"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['card_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['cash_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['cheque_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['bank_total']"/></td>
+                                    <td class="text-center"><span t-esc="'%.2f' % user[1]['due_total']"/></td>
+                                </tr>
+                            </t>
+                            <tr style="font-weight: bold;">
+                                <td class="text-center">Sub Total</td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f' % sum(user[1]['card_total'] for user in user_data.items())"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f' % sum(user[1]['cash_total'] for user in user_data.items())"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f' % sum(user[1]['cheque_total'] for user in user_data.items())"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f' % sum(user[1]['bank_total'] for user in user_data.items())"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f' % sum(user[1]['due_total'] for user in user_data.items())"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="text-center">Grand Summary</h3>
+                    <div class="row">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td class="text-start"><strong>Total Credit Card</strong></td>
+                                    <td class="text-end">
+                                        <span t-esc="'%.2f' % sum(user[1]['card_total'] for user in user_data.items())"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start"><strong>Total Cash</strong></td>
+                                    <td class="text-end">
+                                        <span t-esc="'%.2f' % sum(user[1]['cash_total'] for user in user_data.items())"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start"><strong>Total Cheque</strong></td>
+                                    <td class="text-end">
+                                        <span t-esc="'%.2f' % sum(user[1]['cheque_total'] for user in user_data.items())"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start"><strong>Total Bank</strong></td>
+                                    <td class="text-end">
+                                        <span t-esc="'%.2f' % sum(user[1]['bank_total'] for user in user_data.items())"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start"><strong>Grand Total</strong></td>
+                                    <td class="text-end">
+                                        <span t-esc="'%.2f' % sum(user[1]['card_total'] + user[1]['cash_total'] + user[1]['cheque_total'] + user[1]['bank_total'] for user in user_data.items())"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
