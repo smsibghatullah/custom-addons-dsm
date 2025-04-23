@@ -1,0 +1,58 @@
+<odoo>
+  <template id="report_customer_statement">
+    <t t-call="web.external_layout">
+      <t t-call="web.html_container">
+        <main class="o_report_layout">
+          <div class="page">
+            <h2 style="text-align:center;">CUSTOMER STATEMENT</h2>
+            <p>
+              <strong>Partner:</strong>
+              <t t-esc="docs[0].partner_id.name"/><br/>
+            </p>
+
+            <table class="table table-sm o_main_table" style="width:100%; font-size:12px;">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Invoice Date</th>
+                  <th>Due Date</th>
+                  <th>Amount</th>
+                  <th>Currency</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="docs" t-as="line">
+                  <tr>
+                    <td><t t-esc="line.invoice_id.name"/></td>
+                    <td><t t-esc="line.invoice_date"/></td>
+                    <td><t t-esc="line.due_date"/></td>
+                    <td><t t-esc="line.amount_total"/></td>
+                    <td><t t-esc="line.currency_id.name"/></td>
+                    <td><t t-esc="line.balance"/></td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+
+            <t t-set="total" t-value="sum(line.balance for line in docs)"/>
+            <p class="mt16"><strong>Total Balance:</strong>
+              <t t-esc="total"/>
+              <t t-esc="docs[0].currency_id.name"/>
+            </p>
+          </div>
+        </main>
+      </t>
+    </t>
+  </template>
+
+  <report
+    id="action_report_customer_statement"
+    model="custom.customer.statement.line"
+    string="Customer Statement"
+    report_type="qweb-pdf"
+    name="customer_statement.report_customer_statement"
+    file="customer_statement.report_customer_statement"
+    print_report_name="'Customer Statement - %s' % (object.partner_id.name)"
+  />
+</odoo>

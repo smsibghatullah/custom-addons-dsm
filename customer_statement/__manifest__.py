@@ -8,6 +8,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/customer_statement_view.xml",
+        "views/report_customer_statement.xml"
     ],
     "installable": True,
     "application": False,

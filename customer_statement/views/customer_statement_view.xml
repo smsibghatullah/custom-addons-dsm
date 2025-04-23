@@ -1,20 +1,25 @@
 <odoo>
 <data>
 
-    
-
-
     <record id="view_customer_statement_tree" model="ir.ui.view">
         <field name="name">custom.customer.statement.line.tree</field>
         <field name="model">custom.customer.statement.line</field>
         <field name="arch" type="xml">
-            <tree create="false"  string="Customer Statement" >
+            <tree create="false" string="Customer Statement">
+                <header>
+                    <button name="print_customer_statement"
+                            type="object"
+                            string="Print Statement"
+                            class="oe_highlight"
+                            icon="fa-print"/>
+                </header>
+
                 <field name="invoice_id"/>
                 <field name="invoice_date"/>
                 <field name="due_date"/>
                 <field name="amount_total" sum="True"/>
                 <field name="currency_id"/>
-                <field name="balance" sum="True"/>
+                <field name="balance"/>
             </tree>
         </field>
     </record>

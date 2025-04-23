@@ -1,5 +1,6 @@
 from odoo import models, fields , api
 from odoo.addons.base.models.res_partner import WARNING_MESSAGE, WARNING_HELP
+from datetime import datetime
 
 class CustomerStatementLine(models.Model):
     _name = 'custom.customer.statement.line'
@@ -12,6 +13,9 @@ class CustomerStatementLine(models.Model):
     amount_total = fields.Monetary(related='invoice_id.amount_total', store=True)
     balance = fields.Monetary(string='Balance',compute='_compute_balance')
     currency_id = fields.Many2one('res.currency', related='invoice_id.currency_id', store=True)
+
+    def print_customer_statement(self):
+         return self.env.ref('customer_statement.action_report_customer_statement').report_action(self)
 
     def _compute_balance(self):
         for record in self:
@@ -72,3 +76,18 @@ class ResPartner(models.Model):
 
     sale_warn = fields.Selection(WARNING_MESSAGE, 'Sales Warnings', default='no-message', help=WARNING_HELP)
     sale_warn_msg = fields.Text('Message for Sales Order')
+
+
+class ReportCustomerStatement(models.AbstractModel):
+    _name = 'report.customer_statement.report_customer_statement'
+    _description = 'Customer Statement Report'
+
+    def _get_report_values(self, docids, data=None):
+        docs = self.env['custom.customer.statement.line'].browse(docids)
+
+        return {
+            'doc_ids': docids,
+            'doc_model': 'custom.customer.statement.line',
+            'docs': docs.sorted(key=lambda x: (x.partner_id.name, x.invoice_date)),
+            'datetime': datetime,  # 👈 THIS is the key line!
+        }
