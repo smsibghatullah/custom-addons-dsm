@@ -7,22 +7,37 @@
         <field name="arch" type="xml">
             <tree create="false" string="Customer Statement">
                 <header>
+                
                     <button name="print_customer_statement"
                             type="object"
-                            string="Print Statement"
-                            class="oe_highlight"
+                            string="PDF Report"
+                            class="oe_highlight mx-3 my-3"
                             icon="fa-print"/>
+
+                     <button name="export_to_excel"
+                        type="object"
+                        string="XLSX Report"
+                        class="oe_highlight"
+                        icon="fa-file-excel-o"/>
+
                 </header>
 
                 <field name="invoice_id"/>
                 <field name="invoice_date"/>
                 <field name="due_date"/>
+                <field name="invoice_transaction_type" />
+                <field name="invoice_ref"/>
+                <field name="delivery_note" />
+                <field name="debit"/>
+                <field name="credit" />
                 <field name="amount_total" sum="True"/>
                 <field name="currency_id"/>
                 <field name="balance"/>
+                <field name="due_days" />
             </tree>
         </field>
     </record>
+
 
     <record id="action_customer_statement" model="ir.actions.act_window">
         <field name="name">Customer Statement</field>
