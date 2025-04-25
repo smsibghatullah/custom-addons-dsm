@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <tree create="false" string="Customer Statement">
                 <header>
-                
+
                     <button name="print_customer_statement"
                             type="object"
                             string="PDF Report"
@@ -47,6 +47,54 @@
         <field name="view_id" ref="view_customer_statement_tree"/>
     </record>
 
+
+
+    <record id="view_vendor_statement_tree" model="ir.ui.view">
+        <field name="name">custom.vendor.statement.line.tree</field>
+        <field name="model">custom.vendor.statement.line</field>
+        <field name="arch" type="xml">
+            <tree create="false" string="Vendor Statement">
+                <header>
+
+                    <button name="print_vendor_statement"
+                            type="object"
+                            string="PDF Report"
+                            class="oe_highlight mx-3 my-3"
+                            icon="fa-print"/>
+
+                     <button name="export_to_excel"
+                        type="object"
+                        string="XLSX Report"
+                        class="oe_highlight"
+                        icon="fa-file-excel-o"/>
+
+                </header>
+
+                <field name="invoice_id"/>
+                <field name="invoice_date"/>
+                <field name="due_date"/>
+                <field name="invoice_transaction_type" />
+                <field name="invoice_ref"/>
+                <field name="delivery_note" />
+                <field name="debit"/>
+                <field name="credit" />
+                <field name="amount_total" sum="True"/>
+                <field name="currency_id"/>
+                <field name="balance"/>
+                <field name="due_days" />
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_vendor_statement" model="ir.actions.act_window">
+        <field name="name">Vendor Statement</field>
+        <field name="res_model">custom.vendor.statement.line</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('partner_id', '=', active_id)]</field>
+        <field name="view_id" ref="view_vendor_statement_tree"/>
+    </record>
+
     <record id="sale.res_partner_view_buttons" model="ir.ui.view">
         <field name="name">res.partner.view.buttons</field>
         <field name="model">res.partner</field>
@@ -63,6 +111,10 @@
                 <button class="oe_stat_button" type="object" name="action_view_customer_statement"
                                 icon="fa-list">
                                 <field string="Customer Statement" name="customer_statement_count" widget="statinfo"/>
+                            </button>
+                <button class="oe_stat_button" type="object" name="action_view_vendor_statement"
+                                icon="fa-list">
+                                <field string="Vendor Statement" name="vendor_statement_count" widget="statinfo"/>
                             </button>
             </div>
             <page name="internal_notes" position="inside">

@@ -4,13 +4,13 @@ Hide Any Menu User Wise
 
 Installation
 ============
-	- www.odoo.com/documentation/16.0/setup/install.html
+	- www.odoo.com/documentation/14.0/setup/install.html
 	- Install our custom addon
 
 License
 -------
 General Public License, Version 3 (LGPL v3).
-(https://www.odoo.com/documentation/user/16.0/legal/licenses/licenses.html)
+(https://www.odoo.com/documentation/user/14.0/legal/licenses/licenses.html)
 
 Company
 -------
@@ -20,9 +20,6 @@ Credits
 -------
 * Developer:
 (v14) Sreerag @ Cybrosys
-(v15) Midilaj @ Cybrosys
-(v16) VISHNU KP @ Cybrosys
-
 
 Contacts
 --------
