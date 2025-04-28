@@ -13,7 +13,6 @@ class CustomerStatementLine(models.Model):
     invoice_id = fields.Many2one('account.move', string='Invoice')
     invoice_date = fields.Date(related='invoice_id.invoice_date', store=True)
     due_date = fields.Date(related='invoice_id.invoice_date_due', store=True)
-    amount_total = fields.Monetary(related='invoice_id.amount_total', store=True)
     balance = fields.Monetary(string='Balance',compute='_compute_balance')
     currency_id = fields.Many2one('res.currency', related='invoice_id.currency_id', store=True)
     balance_footer = fields.Monetary(string="Balance Footer", compute='_compute_balance_footer', store=False)
@@ -28,6 +27,12 @@ class CustomerStatementLine(models.Model):
     debit = fields.Monetary(string="Debit", compute="_compute_debit_credit", store=True)
     credit = fields.Monetary(string="Credit", compute="_compute_debit_credit", store=True)
     due_days = fields.Integer(string="Due Days", compute="_compute_due_days", store=True)
+    amount_total = fields.Monetary(string="Amount Total", compute="_compute_amount_total", store=True)
+
+    @api.depends('debit', 'credit')
+    def _compute_amount_total(self):
+        for record in self:
+            record.amount_total = (record.debit or 0.0) - (record.credit or 0.0)
 
     @api.depends('invoice_date', 'due_date')
     def _compute_due_days(self):
@@ -38,13 +43,17 @@ class CustomerStatementLine(models.Model):
                 rec.due_days = 0
 
 
-    @api.depends('invoice_id.line_ids')
+    @api.depends('invoice_id.payment_state', 'invoice_id.amount_total', 'invoice_id.amount_residual')
     def _compute_debit_credit(self):
         for record in self:
-            debit = sum(line.debit for line in record.invoice_id.line_ids)
-            credit = sum(line.credit for line in record.invoice_id.line_ids)
-            record.debit = debit
-            record.credit = credit
+            if record.invoice_id:
+                paid_amount = record.invoice_id.amount_total - record.invoice_id.amount_residual
+
+                record.credit = paid_amount
+                record.debit = record.invoice_id.amount_total  
+            else:
+                record.credit = 0.0
+                record.debit = 0.0
 
     def _compute_balance_footer(self):
         all_records = self.search([], order='invoice_date asc, id asc')  
@@ -156,7 +165,6 @@ class VendorStatementLine(models.Model):
     invoice_id = fields.Many2one('account.move', string='Invoice')
     invoice_date = fields.Date(related='invoice_id.invoice_date', store=True)
     due_date = fields.Date(related='invoice_id.invoice_date_due', store=True)
-    amount_total = fields.Monetary(related='invoice_id.amount_total', store=True)
     balance = fields.Monetary(string='Balance',compute='_compute_balance')
     currency_id = fields.Many2one('res.currency', related='invoice_id.currency_id', store=True)
     balance_footer = fields.Monetary(string="Balance Footer", compute='_compute_balance_footer', store=False)
@@ -171,6 +179,13 @@ class VendorStatementLine(models.Model):
     debit = fields.Monetary(string="Debit", compute="_compute_debit_credit", store=True)
     credit = fields.Monetary(string="Credit", compute="_compute_debit_credit", store=True)
     due_days = fields.Integer(string="Due Days", compute="_compute_due_days", store=True)
+    amount_total = fields.Monetary(string="Amount Total", compute="_compute_amount_total", store=True)
+
+    @api.depends('debit', 'credit')
+    def _compute_amount_total(self):
+        for record in self:
+            record.amount_total = (record.debit or 0.0) - (record.credit or 0.0)
+
 
     @api.depends('invoice_date', 'due_date')
     def _compute_due_days(self):
@@ -181,13 +196,18 @@ class VendorStatementLine(models.Model):
                 rec.due_days = 0
 
 
-    @api.depends('invoice_id.line_ids')
+    @api.depends('invoice_id.payment_state', 'invoice_id.amount_total', 'invoice_id.amount_residual')
     def _compute_debit_credit(self):
         for record in self:
-            debit = sum(line.debit for line in record.invoice_id.line_ids)
-            credit = sum(line.credit for line in record.invoice_id.line_ids)
-            record.debit = debit
-            record.credit = credit
+            if record.invoice_id:
+                paid_amount = record.invoice_id.amount_total - record.invoice_id.amount_residual
+
+                record.credit = paid_amount
+                record.debit = record.invoice_id.amount_total  
+            else:
+                record.credit = 0.0
+                record.debit = 0.0
+
 
     @api.depends('balance')
     def _compute_balance_footer(self):
