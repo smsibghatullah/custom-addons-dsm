@@ -368,7 +368,7 @@ class ResPartner(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Customer Statement',
+            'name': 'Vendor Statement',
             'res_model': 'custom.vendor.statement.line',
             'view_mode': 'tree',
             'domain': [('partner_id', '=', self.id)],
